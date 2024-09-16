@@ -1,0 +1,23 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: zkhooveza
+# "app" enables Serverless Framework Dashboard features and sharing them with other Services.
+app: sls-splunk-hec-proxy
+# "service" is the name of this project. This will also be added to your AWS resource names.
+service: sls-splunk-hec-proxy
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+functions:
+  log-to-http-splunk:
+    handler: handlers/hec-proxy.handler
+    environment:
+      SPLUNK_TOKEN: ${ssm:/hec-proxy/splunk-token}
+      HEC_URI: ${ssm:/hec-proxy/splunk-token}
+      SOURCE_HOST: ${ssm:/hec-proxy/source-host}
+      HEC_INDEX: ${ssm:/hec-proxy/index}
+      IGNORE_SELF_SIGNED_CERT: ${ssm:/hec-proxy/ignore-self-signed-cert}
+    events:
+      - httpApi:
+          path: /
+          method: POST
