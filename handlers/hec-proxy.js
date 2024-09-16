@@ -17,7 +17,7 @@ exports.handler = async (event) => {
     sourceType: sourceType,
     host: host,
     index: index
-  }
+  };
 
   try {
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = nodeTlsRejectUnauthorized;
@@ -31,7 +31,7 @@ exports.handler = async (event) => {
     if (res.status == 200) {
       res = await res.json();
       return {
-        body: JSON.stringify(res)
+        body: res
       }
     } else {
       return {
@@ -39,10 +39,12 @@ exports.handler = async (event) => {
         body: res.statusText
       }
     }
-  } catch (e) {
+  } catch (err) {
+    console.log(err);
     return {
       statusCode: 400,
-      body: e
-    };
+      body: err.toString()
+    };  
   }
+
 };

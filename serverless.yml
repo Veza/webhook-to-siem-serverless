@@ -13,10 +13,10 @@ functions:
     handler: handlers/hec-proxy.handler
     environment:
       SPLUNK_TOKEN: ${ssm:/hec-proxy/splunk-token}
-      HEC_URI: ${ssm:/hec-proxy/splunk-token}
-      SOURCE_HOST: ${ssm:/hec-proxy/source-host}
-      HEC_INDEX: ${ssm:/hec-proxy/index}
-      IGNORE_SELF_SIGNED_CERT: ${ssm:/hec-proxy/ignore-self-signed-cert}
+      HEC_URI: ${ssm:/hec-proxy/uri}
+      SOURCE_HOST: ${ssm:/hec-proxy/source-host, "veza"}
+      HEC_INDEX: ${ssm:/hec-proxy/index, "main"}
+      IGNORE_SELF_SIGNED_CERT: ${ssm:/hec-proxy/ignore-self-signed-cert, "false"}
     events:
       - httpApi:
           path: /
