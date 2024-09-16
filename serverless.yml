@@ -19,5 +19,5 @@ functions:
       IGNORE_SELF_SIGNED_CERT: ${ssm:/hec-proxy/ignore-self-signed-cert, "false"}
     events:
       - httpApi:
-          path: /
+          path: /log-to-http-splunk
           method: POST
