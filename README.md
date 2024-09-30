@@ -1,5 +1,5 @@
 
-# Send Veza alert and access review action webhooks to SEIM
+# Send Veza alert and access review action webhooks to SIEM
 
 This [Serverless](https://www.serverless.com/) sample project provides a proxy app for reformatting Veza webhook messages for various SIEMs. The following SIEMs are currently supported:
 1. Splunk
