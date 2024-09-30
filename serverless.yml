@@ -1,15 +1,15 @@
 # "org" ensures this Service is used with the correct Serverless Framework Access Key.
 org: zkhooveza
 # "app" enables Serverless Framework Dashboard features and sharing them with other Services.
-app: sls-splunk-hec-proxy
+app: webhook-to-siem-sls
 # "service" is the name of this project. This will also be added to your AWS resource names.
-service: sls-splunk-hec-proxy
+service: webhook-to-siem-sls
 
 provider:
   name: aws
   runtime: nodejs20.x
 functions:
-  log-to-http-splunk:
+  log-http-to-splunk:
     handler: handlers/hec-proxy.handler
     environment:
       SPLUNK_TOKEN: ${ssm:/hec-proxy/splunk-token}
@@ -19,5 +19,5 @@ functions:
       IGNORE_SELF_SIGNED_CERT: ${ssm:/hec-proxy/ignore-self-signed-cert, "false"}
     events:
       - httpApi:
-          path: /log-to-http-splunk
+          path: /log-http-to-splunk
           method: POST

@@ -6,6 +6,7 @@ const index = process.env.HEC_INDEX || 'main';
 const nodeTlsRejectUnauthorized = (process.env.IGNORE_SELF_SIGNED_CERT || 'false').toLowerCase() == 'true' ? 0 : 1;
 
 exports.handler = async (event) => {
+
   const requestBody = JSON.parse(event.body);
   const headers = {
     'Content-Type': 'application/json',
