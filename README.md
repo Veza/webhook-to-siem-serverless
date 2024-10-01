@@ -5,7 +5,7 @@ This [Serverless](https://www.serverless.com/) project provides a proxy app for 
 1. Splunk
 
 ## 1. Splunk
-Splunk provides a HTTP Event Collector (HEC), which lets you send data and application events to a Splunk deployment over HTTP and HTTPS. After configuring the HTTP Event Collector on Splunk (Configuraton differs depending on the platform), you will get the **HTTP Event Collector URL**, which accepts the HTTP POST message. The body of the message is in the format
+Splunk provides a HTTP Event Collector (HEC), which lets you send data and application events to a Splunk deployment over HTTP and HTTPS. After configuring the HTTP Event Collector on Splunk (Configuraton differs depending on the platform - Refer to the [Splunk Documentation](https://docs.splunk.com/Documentation/SplunkCloud/9.2.2406/Data/UsetheHTTPEventCollector) for configuration steps), you will get the **HTTP Event Collector URL**, which accepts the HTTP POST message. The body of the message is in the format
 
 ```
 {
