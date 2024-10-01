@@ -1,7 +1,7 @@
 
 # Send Veza alert and access review action webhooks to SIEM
 
-This [Serverless](https://www.serverless.com/) sample project provides a proxy app for reformatting Veza webhook messages for various SIEMs. The following SIEMs are currently supported:
+This [Serverless](https://www.serverless.com/) project provides a proxy app for reformatting Veza webhook messages for various SIEMs. The following SIEMs are currently supported:
 1. Splunk
 
 ## 1. Splunk
@@ -26,16 +26,24 @@ Sending a Veza webhook message to HEC is as easy as embedding the original messa
 
 ### Deploy to AWS
 
+This sample is built using Serverless Framework. Below are steps for deloyment. Alternatively, you may use a framework of your choice (for example, [AWS Serverless Application Model (SAM)](https://aws.amazon.com/serverless/sam/) or build the Lambda manually using the sample code [hec-proxy.js](./handlers/hec-proxy.js))
+
+#### Deploy Serverless Framework project
+
 1. **Add environment variables:**
   The serverlsss implementation uses AWS Parameter Store to store environment variables. Create the following Parameters in Parameter Store:  
 
     | Name | Type | Value |
     | ---- | ---- | ----- |
     | `/hec-proxy/uri` | `String` | The HTTP Event Collector URL to send events to |
-    | `/hec-proxy/splunk-token` | `SecureString` | The Splunk token to authenticate the HTTP Event Collector URL |
     | `/hec-proxy/source-host` | `String` | (optional) This is what you want to populate `host` with in the message. If omitted, it will default to `veza` |
     | `/hec-proxy/index` | `String` | (optional) This is value you want to populate `index` with in the mssage. If omitted, it will default to `main` |
     | `/hec-proxy/ignore-self-signed-cert` | `String` | This is an option to avoid TLS errors. For Splunk Cloud free trial accounts, set this to `true` to temporarily ignore certificate verification, as the cert here is self-signed. In production environments, this should be `false` or unset so that TLS is enabled |
+
+    > ⚠️ The variables stored in Parameter Store above get copied into the Lambda environment variables at deploy time. Changing the values in Parameter Store after deployment will not change the values on the Lambda at runtime. To update the Lambda's environment variables with the latest values in Parameter Store, you must re-deploy.
+
+    ![screenshot](./img/parameter-store.png)
+
 
 2. **Set up Serverless Framework with AWS**
 
@@ -44,14 +52,25 @@ Sending a Veza webhook message to HEC is as easy as embedding the original messa
     * [Sign In to the Serverless Framework](https://www.serverless.com/framework/docs/getting-started#signing-in)
     * [Configure Serverless with AWS Credentials](https://www.serverless.com/framework/docs/getting-started#setting-up-aws-credentials)
 
+
 3. **Deploy using serverless**
 
-    After you've used the `serverless` commaned to set everyting up per step #2 above, deploy this sample code by running the following command
+    After you've used the `serverless` command to set everyting up per step #2 above, deploy by running the following command
 
     ```
     serverless deploy
     ```
 
+    You should see output similar to the following: 
+    ```
+    Deploying "webhook-to-siem-sls" to stage "dev" (us-east-1)
+
+    ✔ Service deployed to stack webhook-to-siem-sls-dev (46s)
+
+    endpoint: POST - https://99lj2y8vt5.execute-api.us-east-1.amazonaws.com/log-http-to-splunk
+    functions:
+      log-http-to-splunk: webhook-to-siem-sls-dev-log-http-to-splunk (2.8 kB)
+    ```
 
 ## Veza Setup
 
@@ -63,9 +82,9 @@ Sending a Veza webhook message to HEC is as easy as embedding the original messa
   | Field | Description | Example |
   | ----- | ----------- | ------- |
   | Name  | Provide a name for the Orchestration Action | `Splunk HEC` |
-  | URL   | The HTTP Event Collector URL | `https://prd-p-po2cw.splunkcloud.com:8088/services/collector/raw` |
+  | URL   | The POST endpoint of the deployed service (see example output from above) | `https://99lj2y8vt5.execute-api.us-east-1.amazonaws.com/log-http-to-splunk` |
   | Authentication | Choose `Token` | `Token` |
-  | Authorization Token | Enter the value `Splunk` followed by space and the Splink token | `Splunk c7636d11-2719-4ae8-3329-938acd2b8763` |
+  | Authorization Token | Enter the Splunk token to authenticate the HTTP Event Collector URL | `c7636d11-2719-4ae8-3329-938acd2b8763` |
 
 ### 2. Add a Webhook to a rule:
 Webhooks can be attached to rules by opening the *rule builder*, accessed from the **Access Intelligence** > *Rules & Alerts*, or from **Access Search** > *Saved Queries*.

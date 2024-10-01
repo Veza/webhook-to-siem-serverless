@@ -12,7 +12,6 @@ functions:
   log-http-to-splunk:
     handler: handlers/hec-proxy.handler
     environment:
-      SPLUNK_TOKEN: ${ssm:/hec-proxy/splunk-token}
       HEC_URI: ${ssm:/hec-proxy/uri}
       SOURCE_HOST: ${ssm:/hec-proxy/source-host, "veza"}
       HEC_INDEX: ${ssm:/hec-proxy/index, "main"}

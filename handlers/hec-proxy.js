@@ -1,4 +1,3 @@
-const token = process.env.SPLUNK_TOKEN;
 const uri = process.env.HEC_URI;
 const sourceType = '_json';
 const host = process.env.SOURCE_HOST || 'veza';
@@ -6,8 +5,10 @@ const index = process.env.HEC_INDEX || 'main';
 const nodeTlsRejectUnauthorized = (process.env.IGNORE_SELF_SIGNED_CERT || 'false').toLowerCase() == 'true' ? 0 : 1;
 
 exports.handler = async (event) => {
+  const token = event.headers['authorization'];
 
   const requestBody = JSON.parse(event.body);
+
   const headers = {
     'Content-Type': 'application/json',
     'Authorization': `Splunk ${token}`
@@ -31,6 +32,7 @@ exports.handler = async (event) => {
 
     if (res.status == 200) {
       res = await res.json();
+      console.info(res);
       return {
         body: res
       }
@@ -41,7 +43,7 @@ exports.handler = async (event) => {
       }
     }
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return {
       statusCode: 400,
       body: err.toString()
