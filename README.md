@@ -22,16 +22,16 @@ Splunk provides a HTTP Event Collector (HEC), which lets you send data and appli
 * You may populate `host` with a value referring to the source of the message
 * Default `index` to `main`, or you can use a different index of your choice.
 
-Sending a Veza webhook message to HEC is as easy as embedding the original message in `event` before sending it in the above format to Splunk. The provided code [hec-proxy.js](./handlers/hec-proxy.js) is a sample Lambda function that serves this purpose. Follow the below steps to deploy the function to AWS using the [Serverless](https://www.serverless.com/) framework.
+Sending a Veza webhook message to HEC is as easy as embedding the original message in `event` before sending it in the above format to Splunk. The provided code [hec-proxy.js](./handlers/hec-proxy.js) is a Lambda function that serves this purpose. Follow the below steps to deploy the function to AWS using the [Serverless](https://www.serverless.com/) framework.
 
 ### Deploy to AWS
 
-This sample is built using Serverless Framework. Below are steps for deloyment. Alternatively, you may use a framework of your choice (for example, [AWS Serverless Application Model (SAM)](https://aws.amazon.com/serverless/sam/) or build the Lambda manually using the sample code [hec-proxy.js](./handlers/hec-proxy.js))
+This sample is built using Serverless Framework. Below are steps for deloyment. Alternatively, you may use a framework of your choice (for example, [AWS Serverless Application Model (SAM)](https://aws.amazon.com/serverless/sam/) or build the Lambda manually using the [hec-proxy.js](./handlers/hec-proxy.js) as sample code)
 
 #### Deploy Serverless Framework project
 
 1. **Add environment variables:**
-  The serverlsss implementation uses AWS Parameter Store to store environment variables. Create the following Parameters in Parameter Store:  
+  The serverlsss implementation uses AWS Parameter Store to store values that will be injected into the Lambda's environment variables at deployment time. Create the following Parameters in Parameter Store:  
 
     | Name | Type | Value |
     | ---- | ---- | ----- |
